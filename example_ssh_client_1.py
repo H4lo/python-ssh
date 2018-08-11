@@ -5,7 +5,7 @@ import threading
 import sys
 
 
-def ssh_command(ip,username,password,command):
+def ssh_command(ip,username,password):
 	client = paramiko.SSHClient()
 	# 新建一个ssh客户端
 	
@@ -17,16 +17,25 @@ def ssh_command(ip,username,password,command):
 	# 连接会话
 	
 	if ssh_session.active:
+		flag = 1
 		
-		ssh_session.exec_command(command)
-		print ssh_session.recv(1024)
-		# 执行输入的命令并打印出来
+		print 'Enter a command: (exit with \'q\')'
+		while(flag):
+			ssh_session = client.get_transport().open_session()
+			# 这里必须每次都确认一次会话
+			
+			command = raw_input('>>')
+			if command == 'q':
+				flag = 0
+			ssh_session.exec_command(command)
+			print ssh_session.recv(1024)
+			# 执行输入的命令并打印出来
 		
 	return 
 
 	
 if __name__ == '__main__':
 	try:
-		ssh_command(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4])
+		ssh_command(sys.argv[1],sys.argv[2],sys.argv[3])
 	except Exception as e:
 		print e
