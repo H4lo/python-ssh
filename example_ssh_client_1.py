@@ -30,7 +30,7 @@ def ssh_command(ip,username,password):
 			ssh_session.exec_command(command)
 			print ssh_session.recv(1024)
 			# 执行输入的命令并打印出来
-		
+	client.close()
 	return 
 
 	
